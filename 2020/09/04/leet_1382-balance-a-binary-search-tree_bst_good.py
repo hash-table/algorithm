@@ -1,5 +1,9 @@
 # 2020\09\04\leet_1382-balance-a-binary-search-tree_bst_good.py
-# bst_good
+# - _leet 
+# - _bst
+# - _good
+# - _bst_good
+
 
 # Definition for a binary tree node.
 # class TreeNode:
@@ -130,6 +134,7 @@ class Solution:
         
         
         '''
+        20201119_20201150
         Runtime: 356 ms, faster than 85.58% of Python3 online submissions for Balance a Binary Search Tree.
         Memory Usage: 20.7 MB, less than 5.19% of Python3 online submissions for Balance a Binary Search Tree.
         '''
