@@ -1,14 +1,13 @@
 # Rule
 
 ## 0. Intro
-
 - Search conditions in github
 	
-        - <problem source> + #
+        - <problem source> + @ 
         - tokens in <problem identifier>
-        - # + <algo type>
-        - # + <algo type> + # + <marker type>
-        - # + marker type
+        - @  + <algo type>
+        - @  + <algo type> + @  + <marker type>
+        - @  + marker type
             - 'good' : tag for good problems
 
 
@@ -19,23 +18,23 @@
             - year  : YYYY (2020 ~)
             - month : MM (01 ~ )
             - week  : WW (01 ~ )
-            - problem : <source>#<identifier>#<algo type>(#<marker>)
+            - problem : <source>@<identifier>@<algo type>(@<marker>)
     
     2. Example 
 
 	- year#1
 		- month#1
 			- week#1
-				- <problem source>#<problem identifier>#<main algo type>(#<special marker>)
+				- <problem source>@<problem identifier>@<main algo type>(@<marker>)
 			- week#2
-				- #leet#1386-cinema-seat-allocation#string
-				- #leet#1382-balance-a-binary-search-tree#bst#good
+				- leet@1386-cinema-seat-allocation@string
+				- leet@1382-balance-a-binary-search-tree@bst@good
 		- month#2
 	- year#2
 
 
 
 ## 2. Commit message rule	
-	=> #<problem source>#<problem identifier>#<main algo type>(#<special marker>)
+	=> @ <problem source>@<problem identifier>@<main algo type>(@<special marker>)
 
 
