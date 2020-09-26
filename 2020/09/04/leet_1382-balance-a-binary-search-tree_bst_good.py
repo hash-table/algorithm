@@ -1,4 +1,4 @@
-# 2020\09\04\leet@1382-balance-a-binary-search-tree@bst@good.py
+# 2020\09\04\leet_1382-balance-a-binary-search-tree_bst_good.py
 
 # Definition for a binary tree node.
 # class TreeNode:
