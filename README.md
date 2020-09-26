@@ -4,7 +4,7 @@
 
 - Search conditions in github
 	
-        - # + <problem source>
+        - <problem source> + #
         - tokens in <problem identifier>
         - # + <algo type>
         - # + <algo type> + # + <marker type>
