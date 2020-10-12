@@ -10,193 +10,141 @@ class Solution:
     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
         '''
             problem
-                - 2d board가 있다.
-                - words : List[str], 사전 
-                - find all words in the board
-                    - board에서 words에 들어있는 모든 word들을 찾아라 
-                - 방향은 가로 세로만 봄
-                - 한번만 방문 될 수 있다 
-                - 순서에 대해 한번 생각해봐야 하네
-                - 뭐 방향은 가로 세로, 시작이 어디든 상관 없어 그냥 word이기만 하면 됨 
-                - words의 word들은 모두 distinct
+                2d board,words 들이 주어짐
+                board에서 4방향으로 이동할 수 있을 때 찾을 수 있는 모든 단어들을 return 
+                words는 distnct 이다
             
             idea
-                
-                - row, col 에 대해 다 돌면서 word가 되는지를 본다. 
-                
-                row_num = len(words)
-                col_num = len(words[0])
-                
-                # words를 alphabet 기준으로 정방향 역방향 두개의 그래프를 그릴 수 있다 
-                
-                # 반복이 느껴지는데, 어떻게 명확하게 와닿지는 않음 
-                for r in range(row_num):
-                    for c in range(col_num):
-                        
-                        # 해당 (r, c)에서 시작인 경우
-                        # 해당 (r, c)가 끝인 경우 
-                        # 위의 두가지에 대해서 진행을 한다
-                        # 어떠한 경우가 발생을 할 수 있나 
-                        # 중복이 너무 많이 발생할 거 같아 
-                    
-                        pass
-            
-                - 방향을 반대로 해보자. 각 word들에 대해 해당 word가 여기 안에 있는지를 보는거야 
+               
+                => iteration과정에서 엄청 많이 중복이 발생함
+                    -> o a a n 이라고 할 때, o에서 a - a - n 을 갔는데, a에서 또 a - n 을 가는 경우
+                => iteration과정에서 중복이 많이 생기는 것은 자명한 것 같음. 그렇다면 어떻게 pruning을 효율적으로 할까?
                 
                 
-                                
-                row_num = len(board)
-                if row_num < 1 : return []
-                col_num = len(board[0])
-                if col_nun < 1  : return []
+                words_aux = defaultdict(lambda : [])
+                # words 를 이용해서 trie 구조를 만들 수 있지 않을까? 
+                for word in words:
+                    words_aux[word[0]].append(words)
+                # trie에 대해 잘 모른다 공부를 해야할듯. 
                 
-                finished = set()
+                found = set()
                 
-                -> 각 word 들을 만들 수 있는지를 본다
-                for row in range(row_num):
-                    for col in range(col_num):
-                        start_char = board[row][col]
-                        for target_word in aux[start_char] if target_word not in finished:
-
-                            if func(row, col, target_word):
-                                
-                                finished.add(target_word)
-                        
-                return list(finished)                
                 
                 dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-                used_point = set()
-                def func(r, c, tsidx) -> (r, c)에서 시작해서 target_string 을 만들수 있는지 
-                    nonlocal dir,row_num, col_unm, target_word
-                    if (r,c)가 사용불가능한 점인 경우:
-                        return False
-                    else:
-                        #(r,c)가 사용가능한 점인 경우
-                        if board(r, c) == target_word[tsidx]:
-                            if tsidx >= len_target_word-1:
-                                return True
-                            else:
-                                tmp_ret = False
-                                for dir in dirs:
-                                    nextr = r + dir[0]
-                                    nextc = c + dir[1]
-                                    if (nextr, nextc) 가 사용가능하고, 아직 방문하지 않은 점이라면:
-                                        used_point.add((nextr, nextc))
-                                        if func(nextr, nextc, tsidx+1):
-                                            return True
-                                return False
-                            
-                        else:
-                            return False
+                def validate_node(node):
+                    nonlocal len_row, len_col
+                    return node[0] >= 0 and node[0] < len_row and node[1] >= 0 and node[1] < len_col
+                    
+                # 정답 set이 엄청 narrow 함을 생각하자. 과정들도 모두 words내에 들어 있어야 한다 
+                def dfs(node):
+                    nonlocal trie
+                    visit = set()
+                    tree = trie[board[node[0]][node[1]]]     
+                    # node 는 시작 문자, trie의 root 라는 거잖아 
+                    def recur(node, accm, trie_node):
+                        nonlocal visit, found
+                        visit.add(node)
+                        accm = accm + board[node[0]][node[1]]
+                        # accm이 tree에 존재하는 path 인가? 
                         
+                        if trie_node.end_flag :
+                            words_set.remove(accm)
+                            found.add(accm)
                         
-                
+                        candidates = tree[trie_node]
+                        children = set(trie_node.children.keys())
+                        for dir in dirs:
+                            next_node = (node[0] + dir[0], node[1] + dir[1])
+                            if validate_node(next_node) and next_node not in visit and :
+                                # accm이 적어도 words 내에 존재하는 path 여야 한다 
+                                # board[next_node[0]][next_node[1]] 이랑 같은 곳들에 대해 가야함 
+                                board[next_node[0]][next_node[1]] in children_chr:
+                                recur(next_node, accm )
+                    recur(node, '')         
+                    
+                    
+                    
+                    
                     
                 
+                for r in range(row):
+                    for c in range(col):
+                        현재 남은 words 중에서 board[r][c]가 첫 글자일 때 
+                        가질 수 있는 모든 단어들을 찾는다.
+                        # (r, c)에서 갈 수 있는 모든 방식을 다 체크한다.
+                        
+                
+            
+            
+            
+            
             well-formed
             
-                row_num = len(board)
-                if row_num < 1 : return []
-                col_num = len(board[0])
-                if col_nun < 1  : return []
-                
-                dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-                finished = set()
-                aux = defaultdict(labmda : [])
-                
-                for word in words:
-                    aux[word[0]].append(word)
-                
-                
-                def is_valid(r, c):
-                    nonlocal row_num, col_num
-                    return (r >= 0 and r < row_num and c >= 0 and c < col_num)
-                    
-                def func(r, c, target_word, tsidx, used) -> bool 
-                    nonlocal row_num, col_unm, target_word, dirs
-                    if not is_valid(r, c)
-                        return False
-                    else:
-                        if board[r][c] == target_word[tsidx]:
-                            if tsidx >= len(target_word)-1:
-                                return True
-                            else:
-                                default_ret = False
-                                for dir in dirs:
-                                    nextr, nextc = r + dir[0], c + dir[1]
-                                    if is_valid(nextr, nextc) and (nextr, nextc) not in used:
-                                        used.add((nextr, nextc))
-                                        if func(nextr, nextc, target_word, tsidx+1, used):
-                                            return True
-                                        used.remove((nextr, nextc))
-                                return False                            
-                        else:
-                            return False
-                                
-                for row in range(row_num):
-                    for col in range(col_num):
-                        start_char = board[row][col]
-                        for target_word in aux[start_char] if target_word not in finished:
-                            if func(row, col, target_word):
-                                finished.add(target_word)
-                return list(finished)                 
+            
             
             test
         
         
-        
         '''
-        row_num = len(board)
-        if row_num < 1 : return []
-        col_num = len(board[0])
-        if col_num < 1  : return []
-
-        dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-        finished = set()
-        aux = defaultdict(lambda : [])
-
-        for word in words:
-            aux[word[0]].append(word)
-
-
-        def is_valid(r, c):
-            nonlocal row_num, col_num
-            return (r >= 0 and r < row_num and c >= 0 and c < col_num)
-
-        def func(r, c, target_word, tidx, used) -> bool :
-            nonlocal dirs
-            if not is_valid(r, c):
-                return False
+        def add_trie(root, word, offset):
+            if offset < len(word):
+                if root.children.get(word[offset], None) == None:
+                    root.children[word[offset]] = Node(word[offset])
+                add_trie(root.children[word[offset]], word, offset+1)
             else:
-                if board[r][c] == target_word[tidx]:
-                    if tidx >= len(target_word)-1:
-                        return True
-                    else:
-                        # default_ret = False
-                        for dir in dirs:
-                            nextr, nextc = r + dir[0], c + dir[1]
-                            if is_valid(nextr, nextc) and (nextr, nextc) not in used:
-                                used.add((nextr, nextc))
-                                if func(nextr, nextc, target_word, tidx+1, used):
-                                    return True
-                                used.remove((nextr, nextc))
-                        return False                            
-                else:
-                    return False
+                root.end_flag = True
+        
+        trie_root = Node('<root>')
+        
+        for word in words:
+            add_trie(trie_root, word, 0)
 
-        for row in range(row_num):
-            for col in range(col_num):
-                start_char = board[row][col]
-                for target_word in aux[start_char]:
-                    if target_word not in finished:
-                        if func(row, col, target_word, 0, {(row, col)}):    
-                            finished.add(target_word)
-        return list(finished)                 
+        word_set = set(words)
+        found = set()
+        dirs = ((0, 1), (0, -1), (1, 0), (-1, 0))                
 
-    '''
-    
-    
-    Time Limit Exceeded
+        def validate_node(node):
+            nonlocal row_num, col_num
+            return node[0] >= 0 and node[0] < row_num and node[1] >= 0 and node[1] < col_num    
+        
+        def dfs(point):
+            nonlocal board, trie_root
+            visit = set()
+            char = board[point[0]][point[1]]
+            tree = trie_root.children.get(char, None)
+            if tree:
+                recur(point, '', tree, visit)         
+        
+        
+        def recur(point, accm, trie_node, visit):
+            nonlocal dirs
+            visit.add(point)
+            accm = accm + board[point[0]][point[1]]
+            
+            if trie_node.end_flag :
+                found.add(accm)
 
-    
-    '''
+            candidates  = set(trie_node.children.keys())
+            for dir in dirs:
+                next_point = (point[0] + dir[0], point[1] + dir[1])
+                if validate_node(next_point) and next_point not in visit and board[next_point[0]][next_point[1]] in candidates:
+                    recur(next_point, accm, trie_node.children[board[next_point[0]][next_point[1]]], visit)
+            
+            visit.remove(point)
+
+
+        row_num = len(board)
+        if row_num < 1: return []
+        col_num = len(board[0])
+        if col_num < 1: return []
+        
+        for r in range(row_num):
+            for c in range(col_num):
+                dfs((r, c))
+        return list(found)
+
+'''
+    Runtime: 480 ms, faster than 27.48% of Python3 online submissions for Word Search II.
+    Memory Usage: 39.1 MB, less than 8.80% of Python3 online submissions for Word Search II.
+
+'''
