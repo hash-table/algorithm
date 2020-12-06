@@ -2,8 +2,6 @@ class Solution:
     def minSubarray(self, nums: List[int], p: int) -> int:
         
         '''
-
-
             need = sum(nums) % p
 
             # the in operation on a dict, or the dict_keys object you get back from calling keys() on it (in 3.x), 
